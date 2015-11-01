@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        clearBackStack();
 
         if (id == R.id.nav_appstores) {
             replaceFragment(AppStoresFragment.newInstance());
