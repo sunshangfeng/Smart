@@ -117,16 +117,20 @@ public class AppStoresFragment extends Fragment {
             gridBean.setColor(stores.getData().get(i).getColor());
             list.add(gridBean);
         }
+
         fragmentAdapter = new FragmentAdapter(getChildFragmentManager(), 2, list);
         viewpager.setAdapter(fragmentAdapter);
         if (fragmentAdapter.getCount() > 1) {
             btLeft.setVisibility(View.VISIBLE);
             btRight.setVisibility(View.VISIBLE);
         }
+        
         fragmentAdapter.setOnItemClickListener(new FragmentAdapter.OnItemClickListener() {
             @Override
             public void OnItemClickListener(View view, int position, long id) {
-                ((MainActivity) getActivity()).replaceFragment(AppFragment.newInstance(stores.getData().get(position).getStoresID()));
+                String storesid = stores.getData().get(position).getStoresID();
+                preference.put(Constant.PreferenceKey.STORES_ID, storesid);
+                ((MainActivity) getActivity()).replaceFragment(AppFragment.newInstance(storesid));
             }
         });
     }

@@ -1,3 +1,25 @@
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.ssf.smart.WebFragment"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    tools:context="com.ssf.smart.WebFragment">
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/click"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|center_vertical"
+        android:layout_margin="20dp"
+        android:clickable="true"
+        android:background="@android:color/transparent"
+        android:focusableInTouchMode="true">
+
+        <requestFocus />
+    </Button>
+</FrameLayout>

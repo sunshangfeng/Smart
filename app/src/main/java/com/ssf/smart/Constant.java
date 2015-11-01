@@ -15,5 +15,6 @@ public class Constant {
     public interface PreferenceKey {
         String LOGIN = "login";
         String URL = "url";
+        String STORES_ID = "storesid";
     }
 }

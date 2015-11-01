@@ -45,7 +45,14 @@ public class WebFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        web = (WebView) view;
+        web = (WebView) view.findViewById(R.id.webview);
+        view.findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity activity = (MainActivity) getActivity();
+                activity.showDrawer();
+            }
+        });
         initWeb();
     }
 
@@ -59,6 +66,6 @@ public class WebFragment extends Fragment {
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        web.loadUrl(is ? url : "http://"+url);
+        web.loadUrl(is ? url : "http://" + url);
     }
 }
