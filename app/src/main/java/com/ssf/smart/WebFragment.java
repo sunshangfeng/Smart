@@ -1,12 +1,10 @@
 package com.ssf.smart;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -14,14 +12,18 @@ import android.webkit.WebView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class WebFragment extends Fragment {
     private static final String ARG_PARAM1 = "url";
     @Bind(R.id.webview)
     WebView webview;
+    @Bind(R.id.click)
+    View click;
 
     private String url;
-    private MainActivity activity;
+    private WebView web;
+    private MainActivity _activity;
 
 
     public static WebFragment newInstance(String param1) {
@@ -38,8 +40,6 @@ public class WebFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        activity  = (MainActivity) getActivity();
         if (getArguments() != null) {
             url = getArguments().getString(ARG_PARAM1);
         }
@@ -57,13 +57,36 @@ public class WebFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        web = (WebView) view.findViewById(R.id.webview);
         initWeb();
+    }
+
+    @OnClick(R.id.click)
+    void onclick(){
+        _activity.showDrawer();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        click.requestFocus();
+        click.setFocusable(true);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        _activity = (MainActivity) activity;
+        _activity.setShow(true);
     }
 
     private void initWeb() {
         boolean is = url.startsWith("http://");
-        WebSettings webSettings = webview.getSettings();
+        WebSettings webSettings = web.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowContentAccess(true);
         webSettings.setAppCacheEnabled(false);
@@ -71,18 +94,7 @@ public class WebFragment extends Fragment {
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webview.loadUrl(is ? url : "http://" + url);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.webmenu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return activity.onNavigationItemSelected(item);
+        web.loadUrl(is ? url : "http://" + url);
     }
 
     @Override

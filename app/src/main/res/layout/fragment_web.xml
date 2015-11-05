@@ -7,7 +7,20 @@
 
     <WebView
         android:id="@+id/webview"
+        android:clickable="false"
+        android:touchscreenBlocksFocus="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <View
+        android:id="@+id/click"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|center_vertical"
+        android:clickable="true"
+        android:background="@android:color/transparent"
+        android:focusableInTouchMode="true">
+
+        <requestFocus />
+    </View>
 </FrameLayout>

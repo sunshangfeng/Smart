@@ -1,11 +1,16 @@
 package com.ssf.smart;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +31,31 @@ public class MainActivity extends AppCompatActivity
 
     private String storesid;
 
+    public void setShow(boolean isShow) {
+        this.isShow = isShow;
+    }
+
+    private boolean isShow;
+
+    private Fragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content);
+        setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setElevation(0);
 
         preferenceUtils = new PreferenceUtils(this);
 
         url = preferenceUtils.get(Constant.PreferenceKey.URL, "");
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        MYActionBarDrawerToggle toggle = new MYActionBarDrawerToggle(
+                this, drawer);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         if (TextUtils.isEmpty(url)) {
             replaceFragment(LoginFragment.newInstance());
@@ -47,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void replaceFragment(Fragment fragment) {
+        this.fragment = fragment;
         getSupportFragmentManager().beginTransaction().
                 replace(R.id.content, fragment).addToBackStack(null).commit();
     }
@@ -59,22 +79,36 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onBackPressed() {
-
-        int stack = getSupportFragmentManager().getBackStackEntryCount();
-        if (stack > 1) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            finish();
-        }
+    public void showDrawer() {
+        login = preferenceUtils.getObject(Constant.PreferenceKey.LOGIN, Login.class);
+        storesid = preferenceUtils.get(Constant.PreferenceKey.STORES_ID, "");
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
+        super.openOptionsMenu();
 
     }
 
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            int stack = getSupportFragmentManager().getBackStackEntryCount();
+            if (stack > 1) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                finish();
+            }
+        }
+    }
+
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        login = preferenceUtils.getObject(Constant.PreferenceKey.LOGIN, Login.class);
-        storesid = preferenceUtils.get(Constant.PreferenceKey.STORES_ID, "");
+        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         clearBackStack();
@@ -88,10 +122,28 @@ public class MainActivity extends AppCompatActivity
             replaceFragment(LoginFragment.newInstance());
         }
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     void Toast(String string) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+    }
+
+    public class MYActionBarDrawerToggle extends ActionBarDrawerToggle {
+
+        public MYActionBarDrawerToggle(Activity activity, DrawerLayout drawer) {
+            super(activity, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            super.onDrawerClosed(drawerView);
+            if (fragment instanceof  WebFragment){
+                WebFragment _fragment = (WebFragment) fragment;
+                _fragment.onResume();
+            }
+        }
     }
 }
