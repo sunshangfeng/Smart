@@ -3,9 +3,6 @@ package com.ssf.smart;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -24,27 +21,22 @@ public class MainActivity extends AppCompatActivity
 
     @Bind(R.id.email)
     TextView email;
+
     private String url;
+
     private String storesid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_content);
 
+        getSupportActionBar().setElevation(0);
 
         preferenceUtils = new PreferenceUtils(this);
 
         url = preferenceUtils.get(Constant.PreferenceKey.URL, "");
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         if (TextUtils.isEmpty(url)) {
             replaceFragment(LoginFragment.newInstance());
@@ -67,36 +59,22 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void showDrawer() {
-        login = preferenceUtils.getObject(Constant.PreferenceKey.LOGIN, Login.class);
-        storesid = preferenceUtils.get(Constant.PreferenceKey.STORES_ID, "");
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.openDrawer(GravityCompat.START);
-        super.openOptionsMenu();
-
-    }
-
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+
+        int stack = getSupportFragmentManager().getBackStackEntryCount();
+        if (stack > 1) {
+            getSupportFragmentManager().popBackStack();
         } else {
-            int stack = getSupportFragmentManager().getBackStackEntryCount();
-            if (stack > 1) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                finish();
-            }
+            finish();
         }
+
     }
 
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        login = preferenceUtils.getObject(Constant.PreferenceKey.LOGIN, Login.class);
+        storesid = preferenceUtils.get(Constant.PreferenceKey.STORES_ID, "");
         int id = item.getItemId();
 
         clearBackStack();
@@ -110,8 +88,6 @@ public class MainActivity extends AppCompatActivity
             replaceFragment(LoginFragment.newInstance());
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

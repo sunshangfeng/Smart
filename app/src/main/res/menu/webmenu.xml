@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.acctionbaractivitydemo.MainActivity" >
+
+    <item
+        android:id="@+id/nav_appstores"
+        app:showAsAction="never"
+        android:title="选择分店" />
+    <item
+        android:id="@+id/nav_app"
+        android:title="选择应用" />
+    <item
+        app:showAsAction="never"
+        android:id="@+id/nav_back"
+        android:title="退出" />
+</menu>
