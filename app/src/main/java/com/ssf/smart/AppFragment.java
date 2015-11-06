@@ -131,6 +131,10 @@ public class AppFragment extends Fragment {
             btLeft.setVisibility(View.VISIBLE);
             btRight.setVisibility(View.VISIBLE);
         }
+
+        viewpager.requestFocus();
+        viewpager.setFocusable(true);
+
         fragmentAdapter.setOnItemClickListener(new FragmentAdapter.OnItemClickListener() {
             @Override
             public void OnItemClickListener(View view, int position, long id) {

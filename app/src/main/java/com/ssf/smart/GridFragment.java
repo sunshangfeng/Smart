@@ -68,6 +68,8 @@ public class GridFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         gridview.setAdapter(new GridAdapter(getActivity(), list));
+        gridview.requestFocus();
+        gridview.setFocusable(true);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

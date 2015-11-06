@@ -124,6 +124,8 @@ public class AppStoresFragment extends Fragment {
             btLeft.setVisibility(View.VISIBLE);
             btRight.setVisibility(View.VISIBLE);
         }
+        viewpager.requestFocus();
+        viewpager.setFocusable(true);
         
         fragmentAdapter.setOnItemClickListener(new FragmentAdapter.OnItemClickListener() {
             @Override
