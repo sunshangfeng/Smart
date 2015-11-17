@@ -4,11 +4,16 @@ package com.ssf.smart;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ConsoleMessage;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,9 +67,10 @@ public class WebFragment extends Fragment {
     }
 
     @OnClick(R.id.click)
-    void onclick(){
+    void onclick() {
         _activity.showDrawer();
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -95,6 +101,8 @@ public class WebFragment extends Fragment {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         web.loadUrl(is ? url : "http://" + url);
+        web.addJavascriptInterface(new WebMusicInterface(getActivity(), web), "android");
+        web.setWebChromeClient(new MyWebChromeClient());
     }
 
     @Override
@@ -102,4 +110,19 @@ public class WebFragment extends Fragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+    public class MyWebChromeClient extends WebChromeClient {
+        @Override
+        public boolean onConsoleMessage(ConsoleMessage cm) {
+            Log.d(WebFragment.class.getSimpleName(), cm.message() + " -- From line " + cm.lineNumber() + " of " + cm.sourceId());
+            return true;
+        }
+
+        @Override
+        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    }
 }
+
