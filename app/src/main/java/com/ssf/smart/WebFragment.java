@@ -29,6 +29,7 @@ public class WebFragment extends Fragment {
     private String url;
     private WebView web;
     private MainActivity _activity;
+    private WebMusicInterface music;
 
 
     public static WebFragment newInstance(String param1) {
@@ -101,13 +102,15 @@ public class WebFragment extends Fragment {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         web.loadUrl(is ? url : "http://" + url);
-        web.addJavascriptInterface(new WebMusicInterface(getActivity(), web), "android");
-        web.setWebChromeClient(new MyWebChromeClient());
+        music = new WebMusicInterface(getActivity(), web);
+        web.addJavascriptInterface(music, "android");
+//        web.setWebChromeClient(new MyWebChromeClient());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        music.stop();
         ButterKnife.unbind(this);
     }
 

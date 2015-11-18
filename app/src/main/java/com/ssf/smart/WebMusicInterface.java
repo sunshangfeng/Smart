@@ -54,7 +54,7 @@ public class WebMusicInterface {
                             @Override
                             public void run() {
                                 mWeb.loadUrl("javascript:playEnd('" + str + "')");
-                                Log.e(WebMusicInterface.class.getSimpleName(),"播放完成回调");
+                                Log.e(WebMusicInterface.class.getSimpleName(), "播放完成回调");
                             }
                         });
                     }
@@ -65,5 +65,10 @@ public class WebMusicInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void stop() {
+        if (mediaPlayer != null)
+            mediaPlayer.stop();
     }
 }
