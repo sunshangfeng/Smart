@@ -25,6 +25,7 @@ public class WebMusicInterface {
     public WebMusicInterface(Context context, WebView webView) {
         this.mContext = context;
         this.mWeb = webView;
+        mediaPlayer = new MediaPlayer();
     }
 
     private int i;
@@ -32,13 +33,13 @@ public class WebMusicInterface {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @JavascriptInterface//加入这个注解
     public void PLAY(final String str) {
-
         try {
             if (mediaPlayer != null) {
                 mediaPlayer.stop();
             }
-            AssetFileDescriptor fileDescriptor = mContext.getAssets().openFd("music/" + str + ".mp3");
-            mediaPlayer = new MediaPlayer();
+            mediaPlayer.reset();// 重置
+            AssetFileDescriptor fileDescriptor = mContext.getAssets()
+                    .openFd("music/" + str + ".mp3");
             mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),
                     fileDescriptor.getStartOffset(),
                     fileDescriptor.getLength());
@@ -67,8 +68,11 @@ public class WebMusicInterface {
         }
     }
 
-    public void stop() {
-        if (mediaPlayer != null)
+    public void release() {
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }

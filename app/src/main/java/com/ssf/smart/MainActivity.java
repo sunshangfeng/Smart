@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private boolean isShow;
 
     private Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,15 +112,22 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        clearBackStack();
 
         if (id == R.id.nav_appstores) {
+            clearBackStack();
             replaceFragment(AppStoresFragment.newInstance());
         } else if (id == R.id.nav_app) {
+            clearBackStack();
             replaceFragment(AppFragment.newInstance(storesid));
         } else if (id == R.id.nav_back) {
+            clearBackStack();
             preferenceUtils.clear();
             replaceFragment(LoginFragment.newInstance());
+        } else if (id == R.id.nav_refresh) {
+            if (fragment instanceof WebFragment) {
+                WebFragment _fragment = (WebFragment) fragment;
+                _fragment.reload();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -140,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onDrawerClosed(View drawerView) {
             super.onDrawerClosed(drawerView);
-            if (fragment instanceof  WebFragment){
+            if (fragment instanceof WebFragment) {
                 WebFragment _fragment = (WebFragment) fragment;
                 _fragment.onResume();
             }

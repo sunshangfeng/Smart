@@ -11,6 +11,9 @@
                 android:id="@+id/nav_app"
                 android:title="选择应用" />
             <item
+                android:id="@+id/nav_refresh"
+                android:title="刷新当前页面" />
+            <item
                 android:id="@+id/nav_back"
                 android:title="退出" />
         </menu>

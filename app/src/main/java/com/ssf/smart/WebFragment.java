@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -100,6 +102,7 @@ public class WebFragment extends Fragment {
         webSettings.setBuiltInZoomControls(false);
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         web.loadUrl(is ? url : "http://" + url);
         music = new WebMusicInterface(getActivity(), web);
@@ -110,8 +113,19 @@ public class WebFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        music.stop();
+        music.release();
+        clearWebViewCache();
         ButterKnife.unbind(this);
+    }
+
+    public void clearWebViewCache() {
+    // 清除cookie即可彻底清除缓存
+        CookieSyncManager.createInstance(getActivity());
+        CookieManager.getInstance().removeAllCookie();
+    }
+
+    public void reload() {
+        web.reload();
     }
 
     public class MyWebChromeClient extends WebChromeClient {
