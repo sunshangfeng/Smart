@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,7 @@ public class LoginFragment extends Fragment {
         map.put("t", time);
         map.put("m", md5);
         JSONObject params = new JSONObject(map);
+        Log.e(LoginFragment.class.getSimpleName(),LOGIN);
         JsonObjectRequest request = new JsonObjectRequest(LOGIN, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

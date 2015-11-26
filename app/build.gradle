@@ -1,8 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        keyconfig {
+            keyPassword 'sunshangfeng'
+            storeFile file('key/smart.jks')
+            storePassword 'sunshangfeng'
+            keyAlias 'smart'
+        }
+    }
     compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "com.ssf.fragment"
         minSdkVersion 15
@@ -14,6 +22,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.keyconfig
+            buildConfigField "String", "URL", '"http://business.ivcvc.com?app=api&act="'
+        }
+        debug {
+            buildConfigField "String", "URL", '"http://testadmin.mifen517.com?app=api&act="'
         }
     }
     productFlavors {

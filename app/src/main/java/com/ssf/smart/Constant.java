@@ -6,7 +6,7 @@ package com.ssf.smart;
 public class Constant {
 
 
-    public static final String URL = "http://testadmin.mifen517.com?app=api&act=";
+    public static final String URL = BuildConfig.URL;
     public static final String LOGIN = URL + "login";
     public static final String APPSTORES = URL + "appstoreslist";
     public static final String APPLIST = URL + "applist";
